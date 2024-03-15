@@ -24,21 +24,21 @@ func main(){
   if err != nil {
     log.Fatal(err)
   }
-  defer db.close()
+  defer db.Close()
 
   // create table if not exists
-  _, err = db.Exec("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name TEXT, email, TEXT)")
+  _, err = db.Exec("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name TEXT, email TEXT)")
   if err != nil {
     log.Fatal(err)
   }
 
   // create router 
   router := mux.NewRouter() 
-  router.HandleFunc("api/go/users", getUsers(db)).Methods("GET")
-  router.HandleFunc("api/go/users", createUsers(db)).Methods("POST")
-  router.HandleFunc("api/go/users/{id}", getUser(db)).Methods("GET")
-  router.HandleFunc("api/go/users/{id}", updateUser(db)).Methods("PUT")
-  router.HandleFunc("api/go/users/{id}", deleteUser(db)).Methods("DELETE")
+  router.HandleFunc("/api/v1/users", getUsers(db)).Methods("GET")
+  router.HandleFunc("/api/v1/users", createUser(db)).Methods("POST")
+  router.HandleFunc("/api/v1/users/{id}", getUser(db)).Methods("GET")
+  router.HandleFunc("/api/v1/users/{id}", updateUser(db)).Methods("PUT")
+  router.HandleFunc("/api/v1/users/{id}", deleteUser(db)).Methods("DELETE")
 
   // wrap router with CORS and JSON content type middlewares
   enhancedRouter := enableCORS(jsonContentTypeMiddleware(router))
@@ -149,7 +149,7 @@ func updateUser (db *sql.DB) http.HandlerFunc {
     }
 
     // Retrieve the updated user data from the database 
-    var updateUser User
+    var updatedUser User
     err = db.QueryRow("SELECT id, name, email FROM users WHERE id = $1", id).Scan(&updatedUser.Id, &updatedUser.Name, &updatedUser.Email)
     if err != nil {
       log.Fatal(err)

@@ -12,3 +12,9 @@ After entering psql cli, to see all databases
 ```shell 
 \l
 ```
+
+After entering psql cli, to see all relations
+```shell 
+\dt
+```
+
