@@ -1,3 +1,8 @@
+To Start Template App
+```shell
+docker compose up --build -d
+```
+
 To Start postgres container
 ```shell
 docker compose up -d db

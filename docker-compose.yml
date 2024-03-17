@@ -1,4 +1,15 @@
 services:
+  next_frontend:
+    container_name: next_frontend
+    build: 
+      context: ./frontend
+      dockerfile: next.dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - go_backend
   go_backend:
     container_name: go_backend
     image: go_backend:1.0.0
